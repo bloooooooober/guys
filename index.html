@@ -1,0 +1,81 @@
+<style>
+.guy{
+    position:absolute;
+    width:32px;
+    height:32px;
+    image-rendering:pixelated;
+}
+</style>
+
+<script>
+const guys=[];
+
+const sprites = [
+    "mid.png",
+    "run.png"
+];
+
+for(let i=0;i<6;i++){
+
+    let img=document.createElement("img");
+    img.className="guy";
+    img.src=sprites[0];
+
+    document.body.appendChild(img);
+
+    guys.push({
+        el:img,
+        x:Math.random()*innerWidth,
+        y:Math.random()*innerHeight,
+        dx:0,
+        dy:0,
+        steps:0,
+        anim:0
+    });
+}
+
+
+setInterval(()=>{
+
+    for(const g of guys){
+
+        // pick a new direction occasionally
+        if(g.steps<=0){
+            g.dx=Math.floor(Math.random()*3)-1;
+            g.dy=Math.floor(Math.random()*3)-1;
+            g.steps=Math.random()*15+5;
+        }
+
+        g.x+=g.dx*4;
+        g.y+=g.dy*4;
+        g.steps--;
+
+        // animation frame
+        g.anim++;
+
+        if(g.anim%2==0){
+            g.el.src="run.png";
+        }else{
+            g.el.src="mid.png";
+        }
+
+
+        // stay on screen
+        if(g.x<0) g.x=0;
+        if(g.y<0) g.y=0;
+        if(g.x>innerWidth-32) g.x=innerWidth-32;
+        if(g.y>innerHeight-32) g.y=innerHeight-32;
+
+
+        g.el.style.left=g.x+"px";
+        g.el.style.top=g.y+"px";
+
+        // face direction
+        if(g.dx<0)
+            g.el.style.transform="scaleX(-1)";
+        else
+            g.el.style.transform="scaleX(1)";
+    }
+
+},120);
+</script>
