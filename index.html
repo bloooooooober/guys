@@ -4,10 +4,18 @@
     width:32px;
     height:32px;
     image-rendering:pixelated;
+    z-index:9999;
+}
+
+body{
+    margin:0;
+    overflow:hidden;
 }
 </style>
 
 <script>
+window.onload = () => {
+
 const guys=[];
 
 const sprites = [
@@ -25,8 +33,8 @@ for(let i=0;i<6;i++){
 
     guys.push({
         el:img,
-        x:Math.random()*innerWidth,
-        y:Math.random()*innerHeight,
+        x:Math.random()*(window.innerWidth-32),
+        y:Math.random()*(window.innerHeight-32),
         dx:0,
         dy:0,
         steps:0,
@@ -39,28 +47,26 @@ setInterval(()=>{
 
     for(const g of guys){
 
-        // pick a new direction occasionally
         if(g.steps<=0){
             g.dx=Math.floor(Math.random()*3)-1;
             g.dy=Math.floor(Math.random()*3)-1;
-            g.steps=Math.random()*15+5;
+            g.steps=Math.floor(Math.random()*15+5);
         }
 
         g.x+=g.dx*4;
         g.y+=g.dy*4;
         g.steps--;
 
-        // animation frame
+
         g.anim++;
 
         if(g.anim%2==0){
-            g.el.src="run.png";
+            g.el.src=sprites[1];
         }else{
-            g.el.src="mid.png";
+            g.el.src=sprites[0];
         }
 
 
-        // stay on screen
         if(g.x<0) g.x=0;
         if(g.y<0) g.y=0;
         if(g.x>innerWidth-32) g.x=innerWidth-32;
@@ -70,12 +76,15 @@ setInterval(()=>{
         g.el.style.left=g.x+"px";
         g.el.style.top=g.y+"px";
 
-        // face direction
-        if(g.dx<0)
+
+        if(g.dx<0){
             g.el.style.transform="scaleX(-1)";
-        else
+        }else{
             g.el.style.transform="scaleX(1)";
+        }
     }
 
 },120);
+
+};
 </script>
